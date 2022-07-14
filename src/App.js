@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-
+import {useState} from 'react';
+import { typeImplementation } from '@testing-library/user-event/dist/type/typeImplementation';
 
 function Header(props){
   console.log(props, props.title);
@@ -43,16 +44,37 @@ function Article(props){
 }
 
 function App() {
+//  const mode = useState('Welcome');
+  //state는 배열 [0] 초기값, [1]은 값을 바꿀때 사용
+  const [mode, setMode] = useState('Welcome');
+  const [id, setId] = useState('null')
+  
   const topics = [
     {id:1, title:'html', body:'html is ...'},
     {id:2, title:'css', body:'css is ...'},
     {id:3, title:'javaScript', body:'javaScript is ...'}
   ]
+
+  let content = null;
+  if(mode === 'Welcome'){
+    content = <Article title="Welcome" body="Hello React"></Article>
+  }
+  else if(mode === 'Read'){
+    //변수 선언 중요 
+    let title, body = null;
+    for(let i=0; i<topics.length; i++){
+    if(topics[i].id === Number(id)){
+      title = topics[i].title;
+      body= topics[i].body; 
+    }
+  }
+    content = <Article title={title} body={body}></Article>
+  }
   return (
    <div>
-      <Header title="REACT" onChangeMode={()=> alert('Header')}></Header>
-      <Nav topics={topics} onChangeMode={(id)=> alert(id)}></Nav>
-      <Article title="Welcome" body="Hello React"></Article>
+      <Header title="REACT" onChangeMode={()=> {setMode('Welcome');}}></Header>
+      <Nav topics={topics} onChangeMode={(id)=> {setMode('Read'); setId(id);}}></Nav>
+      {content}
    </div>
   );
 }
