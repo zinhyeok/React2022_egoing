@@ -1,17 +1,28 @@
 import logo from './logo.svg';
 import './App.css';
+
+
 function Header(props){
   console.log(props, props.title);
   return (
     <header>
-      <h1><a href="/">{props.title}</a></h1>
+      <h1><a href="/" onClick={(e)=>{
+        e.preventDefault();
+        props.onChangeMode();
+      }}>{props.title}</a></h1>
     </header>
   )
 }
 
 function Nav(props){
 //props.topic, props중 어떤걸 가져올지 꼭 명시해줘야한다
-const lis =  props.topics.map((prop) => <li key={prop.id}><a href={'/read/'+prop.id}>{prop.title}</a></li>);
+const lis =  props.topics.map((prop) => <li key={prop.id}>
+  <a id={prop.id} href={'/read/'+prop.id} onClick={(e)=>{
+    e.preventDefault();
+    props.onChangeMode(e.target.id);
+    }
+    }>{prop.title}</a>
+  </li>);
   
   return(
   <nav>
@@ -39,8 +50,8 @@ function App() {
   ]
   return (
    <div>
-      <Header title="REACT"></Header>
-      <Nav topics={topics}></Nav>
+      <Header title="REACT" onChangeMode={()=> alert('Header')}></Header>
+      <Nav topics={topics} onChangeMode={(id)=> alert(id)}></Nav>
       <Article title="Welcome" body="Hello React"></Article>
    </div>
   );
