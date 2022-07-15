@@ -63,6 +63,7 @@ function Create(props){
 
 function Update(props){
   //props는 외부에서 사용하는 상태입으로 state로 내부에서 변경가능하게 바꿔준다
+  //update에서 state사용
   const [title, setTitle] = useState(props.title);
   const [body, setBody] = useState(props.body);
   return(
@@ -114,11 +115,23 @@ function App() {
       body= topics[i].body; 
     }}
     content = <Article title={title} body={body}></Article>
-    contextControl = <li><a href={"/update/"+id} onClick={event =>
+    contextControl = <>
+    <li><a href={"/update/"+id} onClick={event =>
     { event.preventDefault();
       setMode('Update');
     }}
     >Update</a></li>
+    <li><input type='button' value="Delete" onclick={()=>{
+      const newTopics = []
+      for(let i=0; i<topics.length; i++){
+        if(topics[i].id !== id){
+          newTopics.push(topics[i]);
+        }
+      }
+      setTopics(newTopics);
+      setMode('Welcome');
+    }}/></li>
+    </>
   }
   else if(mode === 'Create'){
     content= <Create onCreate={(title,body)=>{
@@ -150,7 +163,7 @@ function App() {
           }}
           setTopics(newTopics);
           setMode('Read');
-          
+
     }}></Update>
   }
   return (
